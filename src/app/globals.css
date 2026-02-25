@@ -1,26 +1,66 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: rgb(25, 28, 41);
+  --foreground: #f5f5f5;
+  /* Top curve: max 50vw on full-width element (browser clamps to half width) */
+  --section-top-radius: 15vw;
+  --section-top-radius-sm: 15vw;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-dm-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-dm-sans);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  height: 100%;
+  background: rgb(25, 28, 41);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+}
+
+/* Scrollable main area: works on mobile with momentum */
+main {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Section below carousel: wrapper (no curve), title sits on carousel */
+.section-below-carousel {
+  background: transparent;
+}
+@media (min-width: 768px) {
+  .section-below-carousel {
+    background: transparent;
+  }
+}
+
+/* Curved content box: same solid color as page background */
+.section-below-carousel-curved {
+  background: var(--background);
+  border-top-left-radius: var(--section-top-radius);
+  border-top-right-radius: var(--section-top-radius);
+  overflow: hidden;
+}
+@media (min-width: 640px) {
+  .section-below-carousel-curved {
+    border-top-left-radius: var(--section-top-radius-sm);
+    border-top-right-radius: var(--section-top-radius-sm);
+  }
+}
+@media (min-width: 768px) {
+  .section-below-carousel-curved {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    background: transparent;
+  }
 }

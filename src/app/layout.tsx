@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Geist, Geist_Mono } from "next/font/google";
+import { DM_Sans } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
+import { Footer } from "./components/Footer";
 import "./globals.css";
 
-// Fonts are loaded on the server and exposed as CSS variables. We use them in
-// globals.css (--font-geist-sans, --font-geist-mono). No client-side flash.
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
+  weight: ["400", "500", "700"],
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -26,6 +27,10 @@ export const metadata: Metadata = {
     "Find the best internet in your area. Compare ISP plans by speed, price, and coverage—then sign up or request a connection. Location-first.",
 };
 
+export const viewport = {
+  themeColor: "#191c29",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -33,31 +38,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="theme-color" content="#191c29" />
+        <meta name="msapplication-navbutton-color" content="#191c29" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+        className={`${dmSans.variable} ${geistMono.variable} antialiased h-screen max-h-dvh flex flex-col overflow-hidden text-neutral-100 font-sans`}
       >
-        {/* Header: semantic <header> for accessibility and SEO. Padding and
-            text size work on mobile first; we can add breakpoints later. */}
-        <header className="border-b border-neutral-200 px-4 py-3 sm:px-6 sm:py-4">
-          <div className="mx-auto max-w-6xl">
-            <Link href="/" className="text-lg font-semibold text-foreground sm:text-xl">
-              Internet Kenya
-            </Link>
-          </div>
-        </header>
-
-        {/* Main content: flex-1 so the layout fills the viewport and footer
-            stays at the bottom when content is short. */}
-        <main className="flex-1 px-4 py-6 sm:px-6 sm:py-8">
-          <div className="mx-auto max-w-6xl">{children}</div>
+        <main className="flex-1 min-h-0 overflow-auto px-4 pt-0 sm:px-6 sm:pt-0">
+          <div className="mx-auto max-w-6xl min-h-full">{children}</div>
         </main>
 
-        {/* Footer: minimal for now. Same responsive padding as header. */}
-        <footer className="border-t border-neutral-200 px-4 py-4 sm:px-6 sm:py-5">
-          <div className="mx-auto max-w-6xl text-sm text-neutral-600">
-            © {new Date().getFullYear()} Internet Kenya. Find and sign up for the best internet in your area.
-          </div>
-        </footer>
+        <Footer />
       </body>
     </html>
   );
