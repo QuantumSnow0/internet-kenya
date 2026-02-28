@@ -28,6 +28,5 @@ export const providers: readonly ProviderCard[] = [
     accent: "red",
     logoSize: "h-7 w-12 sm:h-10 sm:w-16 md:h-12 md:w-24 lg:h-14 lg:w-28",
     imageSize: { width: 112, height: 56 },
-  },
-  
+  }
 ];
