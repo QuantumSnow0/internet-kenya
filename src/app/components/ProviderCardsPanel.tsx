@@ -19,14 +19,14 @@ const accentCardClass = {
 
 export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
   const curvedBlockClassName =
-    "section-below-carousel-curved relative mt-7 flex flex-col items-center justify-start px-4 pb-6 sm:mt-8 md:mt-0";
+    "section-below-carousel-curved relative mt-7 flex flex-col items-center justify-start px-4 pb-8 sm:mt-8 sm:pb-10 md:mt-0 md:pb-6";
   const cardSizeClass = "w-[5.5rem] sm:w-[6.25rem] md:w-24";
   const cardPaddingClass = "p-3 sm:p-4 md:p-4 lg:p-4";
 
   return (
     <div className={curvedBlockClassName}>
       <div className="curve-cards-anchor relative mx-auto flex w-full max-w-3xl -translate-y-10 flex-col items-center justify-start gap-3 sm:-translate-y-12 sm:gap-4 md:translate-y-0 md:justify-center md:gap-4 lg:gap-5">
-        <ul className="flex max-h-[50svh] w-full max-w-80 flex-wrap content-start justify-evenly gap-4 overflow-y-auto sm:max-w-80 sm:gap-5 md:max-h-none md:max-w-136 md:justify-between md:gap-4 md:overflow-visible lg:max-w-136 lg:gap-5">
+        <ul className="flex w-full max-w-80 flex-wrap content-start justify-evenly gap-4 overflow-visible sm:max-w-80 sm:gap-5 md:max-w-136 md:justify-between md:gap-4 lg:max-w-136 lg:gap-5">
           {providers.map(({ slug, name, logo, accent, logoSize, imageSize }) => (
             <li key={slug} className={`${cardSizeClass} min-w-0`}>
               <Link href={`/providers/${slug}`} className={`${baseCardClass} ${cardPaddingClass} ${accentCardClass[accent]}`}>
@@ -49,7 +49,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
           ))}
         </ul>
       </div>
-      <p className="home-provider-footnote absolute bottom-4 left-1/2 -translate-x-1/2 text-center text-xs text-white/70 md:static md:mt-4 md:translate-x-0">
+      <p className="home-provider-footnote mt-4 text-center text-xs text-white/70 md:mt-4">
         More providers coming soon.
       </p>
     </div>
