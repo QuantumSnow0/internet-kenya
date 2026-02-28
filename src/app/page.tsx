@@ -26,10 +26,10 @@ export default function Home() {
   const [compactCards, setCompactCards] = useState(false);
 
   const sectionClassName =
-    "section-below-carousel relative left-1/2 right-1/2 z-10 flex w-screen -translate-x-1/2 -mt-28 flex-col sm:-mt-32 md:mt-0 md:min-h-[calc(100vh-8rem)] md:flex-1 md:items-center md:justify-center md:gap-3 md:py-8";
+    "section-below-carousel relative left-1/2 right-1/2 z-10 flex w-screen -translate-x-1/2 -mt-36 flex-col sm:-mt-32 md:mt-0 md:min-h-[calc(100vh-8rem)] md:flex-1 md:items-center md:justify-center md:gap-3 md:py-8";
 
   const curvedBlockClassName =
-    "section-below-carousel-curved mt-5 flex flex-col items-center justify-start px-4 pt-6 pb-6 sm:mt-6 sm:pt-8 sm:pb-6 md:mt-0 md:flex-initial md:flex-col md:items-center md:justify-center md:px-4 md:pt-0 md:pb-0";
+    "section-below-carousel-curved mt-4 flex flex-col items-center justify-start px-4 pb-6 sm:mt-5 md:mt-0";
   const mobileCardSizeClass = compactCards
     ? "w-[4.25rem] sm:w-[5.25rem] md:w-24"
     : "w-[5.5rem] sm:w-[6.25rem] md:w-24";
@@ -77,7 +77,7 @@ export default function Home() {
         </h1>
 
         <div className={curvedBlockClassName}>
-          <div className="mx-auto flex w-full max-w-3xl flex-col items-center justify-center gap-4 sm:gap-6 md:gap-4 lg:gap-5">
+          <div className="mx-auto flex w-full max-w-3xl flex-col items-center justify-start gap-3 sm:gap-4 md:justify-center md:gap-4 lg:gap-5">
             <ul
               ref={listRef}
               className="flex max-h-[50svh] w-full max-w-72 flex-wrap content-start justify-evenly gap-3 overflow-y-auto sm:max-w-80 sm:gap-4 md:max-h-none md:max-w-136 md:justify-between md:gap-4 md:overflow-visible lg:max-w-136 lg:gap-5"
