@@ -1,4 +1,4 @@
-export type ProviderAccent = "emerald" | "red";
+export type ProviderAccent = "emerald" | "red" | "white";
 
 export type ProviderCard = {
   slug: string;
@@ -28,5 +28,13 @@ export const providers: readonly ProviderCard[] = [
     accent: "red",
     logoSize: "h-7 w-12 sm:h-10 sm:w-16 md:h-12 md:w-24 lg:h-14 lg:w-28",
     imageSize: { width: 112, height: 56 },
-  }
+  },
+  {
+    slug: "faiba",
+    name: "Faiba",
+    logo: "/faiba-logo.jpg",
+    accent: "white",
+    logoSize: "h-18 w-24 sm:h-10 sm:w-18 md:h-12 md:w-22 lg:h-14 lg:w-24",
+    imageSize: { width: 96, height: 48 },
+  },
 ];

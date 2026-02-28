@@ -4,7 +4,7 @@
   --background: rgb(25, 28, 41);
   --foreground: #f5f5f5;
   --curve-border: rgb(58, 66, 96);
-  --curve-cap-height: clamp(30px, 8vw, 52px);
+  --curve-cap-height: clamp(78px, 18vw, 118px);
 }
 
 @theme inline {
@@ -40,22 +40,30 @@ main {
 
 /* Curved wrapper for card area; heading remains outside this curve */
 .section-below-carousel-curved {
+  position: relative;
+  isolation: isolate;
   background: var(--background);
 
   /* Stronger, more confident curve */
-  border-top-left-radius: 120% 80px;
-  border-top-right-radius: 120% 80px;
+  border-top-left-radius: 130% var(--curve-cap-height);
+  border-top-right-radius: 130% var(--curve-cap-height);
 
   border-top: 2px solid var(--curve-border);
   margin-top: 0;
-  padding-top: 1.5rem;
+  padding-top: 0.75rem;
 
-  overflow: hidden;
+  overflow: visible;
+}
+
+/* Keep the first card row visually nested inside the arc band */
+.curve-cards-anchor {
+  position: relative;
+  z-index: 3;
 }
 
 @media (min-width: 640px) {
   .section-below-carousel-curved {
-    --curve-cap-height: clamp(28px, 6vw, 44px);
+    --curve-cap-height: clamp(72px, 14vw, 108px);
   }
 }
 
@@ -67,4 +75,6 @@ main {
     background: transparent;
     overflow: visible;
   }
+
 }
+
