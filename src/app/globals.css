@@ -78,3 +78,25 @@ main {
 
 }
 
+.provider-selection-active .home-carousel,
+.provider-selection-active .home-provider-title {
+  display: none !important;
+}
+
+.provider-selection-active .section-below-carousel {
+  margin-top: 0 !important;
+  min-height: 100svh !important;
+  justify-content: center !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.provider-selection-active .section-below-carousel-curved {
+  border-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  padding-top: 0 !important;
+  background: rgb(25, 28, 41) !important;
+}
+
+

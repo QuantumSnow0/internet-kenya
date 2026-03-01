@@ -9,12 +9,12 @@ export default function Home() {
 
   return (
     <div className="flex min-h-full flex-col">
-      <section className="relative left-1/2 right-1/2 w-screen shrink-0 -translate-x-1/2 md:hidden">
+      <section className="home-carousel relative left-1/2 right-1/2 w-screen shrink-0 -translate-x-1/2 md:hidden">
         <Carousel images={CAROUSEL_IMAGES} ariaLabel="Featured" />
       </section>
 
       <section className={sectionClassName} aria-label="Choose your internet provider">
-        <h1 className="relative z-20 mb-10 px-4 pt-6 text-center font-sans text-xl font-bold tracking-wide text-white sm:mb-8 sm:pt-8 md:mb-0 md:pt-0 md:text-3xl lg:text-4xl xl:text-5xl">
+        <h1 className="home-provider-title relative z-20 mb-10 px-4 pt-6 text-center font-sans text-xl font-bold tracking-wide text-white sm:mb-8 sm:pt-8 md:mb-0 md:pt-0 md:text-3xl lg:text-4xl xl:text-5xl">
           Choose Your Internet Provider
         </h1>
 
