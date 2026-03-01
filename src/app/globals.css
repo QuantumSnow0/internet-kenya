@@ -149,4 +149,12 @@ main {
   );
 }
 
+.available-providers-row {
+  scrollbar-width: none;
+}
+
+.available-providers-row::-webkit-scrollbar {
+  display: none;
+}
+
 
