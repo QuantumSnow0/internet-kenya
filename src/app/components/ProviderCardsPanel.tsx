@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
@@ -21,6 +21,7 @@ const accentCardClass = {
     "bg-gradient-to-b from-neutral-300 via-neutral-100 to-white shadow-lg shadow-black/15 md:hover:scale-[1.04] md:hover:from-neutral-400 md:hover:via-neutral-200 md:hover:to-white md:hover:shadow-xl md:hover:shadow-black/20 focus:ring-white",
 } as const;
 
+// Canonical county list used for suggestions + strict validation.
 const KENYA_COUNTIES = [
   "Baringo",
   "Bomet",
@@ -71,8 +72,12 @@ const KENYA_COUNTIES = [
   "West Pokot",
 ] as const;
 
+const LOCATION_PROMPT_DELAY_MS = 1300;
+const COUNTY_ERROR_MESSAGE = "Please select a county from the list.";
+
 export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
   const router = useRouter();
+
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [county, setCounty] = useState("");
   const [showLocationPrompt, setShowLocationPrompt] = useState(false);
@@ -81,10 +86,37 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
   const [showAllCounties, setShowAllCounties] = useState(false);
   const [countyError, setCountyError] = useState<string | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
+
   const countyInputRef = useRef<HTMLInputElement>(null);
   const lockedScrollYRef = useRef(0);
+
+  const validCountySet = useMemo(
+    () => new Set(KENYA_COUNTIES.map((countyName) => countyName.toLowerCase())),
+    []
+  );
+
+  const isValidCounty = (value: string) =>
+    value.trim().length > 0 && validCountySet.has(value.trim().toLowerCase());
+
+  const selectedProvider = selectedSlug
+    ? providers.find((provider) => provider.slug === selectedSlug) ?? null
+    : null;
+  const remainingProviders = selectedSlug
+    ? providers.filter((provider) => provider.slug !== selectedSlug)
+    : [];
+  const trimmedCounty = county.trim().toLowerCase();
+  const countySuggestions = showAllCounties
+    ? KENYA_COUNTIES
+    : trimmedCounty.length > 0
+    ? KENYA_COUNTIES.filter((countyName) =>
+        countyName.toLowerCase().includes(trimmedCounty)
+      )
+    : [];
+  const canContinue = selectedSlug !== null && isValidCounty(county);
+
   const isMobileFocusMode = selectedSlug !== null && showLocationPrompt && isInputFocused;
   const showOnlyLocationOnMobile = isMobileFocusMode && !isDesktop;
+
   const curvedBlockClassName = `section-below-carousel-curved relative mt-7 flex flex-col items-center px-4 sm:mt-8 md:mt-0 ${
     selectedSlug
       ? isMobileFocusMode
@@ -95,17 +127,31 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
   const cardSizeClass = "w-[5.5rem] sm:w-[6.25rem] md:w-24";
   const cardPaddingClass = "p-3 sm:p-4 md:p-4 lg:p-4";
 
+  const anchorY = selectedSlug
+    ? isDesktop
+      ? -20
+      : isMobileFocusMode
+      ? 0
+      : -64
+    : isDesktop
+    ? 0
+    : -40;
+  const selectedCardScale = isDesktop ? 1.42 : isMobileFocusMode ? 1.55 : 1.8;
+
+  // Toggles homepage "selected provider mode" styles in globals.css.
   useLayoutEffect(() => {
     document.body.classList.toggle("provider-selection-active", selectedSlug !== null);
     return () => document.body.classList.remove("provider-selection-active");
   }, [selectedSlug]);
 
+  // Lightweight class toggle for mobile keyboard-focus mode.
   useEffect(() => {
     const shouldLockScroll = isMobileFocusMode && !isDesktop;
     document.body.classList.toggle("provider-input-focus-active", shouldLockScroll);
     return () => document.body.classList.remove("provider-input-focus-active");
   }, [isMobileFocusMode, isDesktop]);
 
+  // Hard lock scroll while mobile keyboard is open to prevent page drift.
   useEffect(() => {
     const shouldLockScroll = isMobileFocusMode && !isDesktop;
     const html = document.documentElement;
@@ -159,16 +205,17 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
     };
   }, [isMobileFocusMode, isDesktop]);
 
+  // Show location step after the selected-card animation has time to settle.
   useEffect(() => {
     if (!selectedSlug) return;
-
-    const timeout = window.setTimeout(() => {
-      setShowLocationPrompt(true);
-    }, 1300);
-
+    const timeout = window.setTimeout(
+      () => setShowLocationPrompt(true),
+      LOCATION_PROMPT_DELAY_MS
+    );
     return () => window.clearTimeout(timeout);
   }, [selectedSlug]);
 
+  // Keep a simple responsive flag for desktop/mobile behavior branches.
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 768);
     handleResize();
@@ -176,6 +223,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Resets location-step state whenever provider changes.
   const handleSelectProvider = (slug: string) => {
     setShowLocationPrompt(false);
     setIsInputFocused(false);
@@ -188,10 +236,10 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
     if (window.innerWidth < 768) setIsInputFocused(true);
   };
 
+  // Validate on blur (not while typing) and collapse county menus.
   const handleCountyBlur = () => {
-    const hasValue = county.trim().length > 0;
-    if (hasValue && !isValidCounty(county)) {
-      setCountyError("Please select a county from the list.");
+    if (county.trim().length > 0 && !isValidCounty(county)) {
+      setCountyError(COUNTY_ERROR_MESSAGE);
     } else {
       setCountyError(null);
     }
@@ -200,10 +248,11 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
       setShowCountySuggestions(false);
       setShowAllCounties(false);
     }, 120);
-    if (window.innerWidth >= 768) return;
-    setIsInputFocused(false);
+
+    if (window.innerWidth < 768) setIsInputFocused(false);
   };
 
+  // Chevron opens "all counties" list; second tap closes it.
   const handleToggleCountySuggestions = () => {
     if (showCountySuggestions && showAllCounties) {
       setShowCountySuggestions(false);
@@ -216,10 +265,12 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
     countyInputRef.current?.focus();
   };
 
+  // Gate navigation until county is valid, then pass county in querystring.
   const handleContinue = () => {
     if (!selectedSlug) return;
+
     if (!isValidCounty(county)) {
-      setCountyError("Please select a county from the list.");
+      setCountyError(COUNTY_ERROR_MESSAGE);
       setShowAllCounties(true);
       setShowCountySuggestions(true);
       countyInputRef.current?.focus();
@@ -229,39 +280,6 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
     const selectedCounty = county.trim();
     router.push(`/providers/${selectedSlug}?county=${encodeURIComponent(selectedCounty)}`);
   };
-
-  const remainingProviders = selectedSlug
-    ? providers.filter((provider) => provider.slug !== selectedSlug)
-    : [];
-  const selectedProvider = selectedSlug
-    ? providers.find((provider) => provider.slug === selectedSlug) ?? null
-    : null;
-  const validCountySet = useMemo(
-    () => new Set(KENYA_COUNTIES.map((countyName) => countyName.toLowerCase())),
-    []
-  );
-  const trimmedCounty = county.trim().toLowerCase();
-  const countySuggestions = showAllCounties
-    ? KENYA_COUNTIES
-    : trimmedCounty.length
-    ? KENYA_COUNTIES.filter((countyName) =>
-        countyName.toLowerCase().includes(trimmedCounty)
-      )
-    : [];
-  const isValidCounty = (value: string) =>
-    value.trim().length > 0 && validCountySet.has(value.trim().toLowerCase());
-  const canContinue = selectedSlug !== null && isValidCounty(county);
-
-  const anchorY = selectedSlug
-    ? isDesktop
-      ? -20
-      : isMobileFocusMode
-      ? 0
-      : -64
-    : isDesktop
-    ? 0
-    : -40;
-  const selectedCardScale = isDesktop ? 1.42 : isMobileFocusMode ? 1.55 : 1.8;
 
   return (
     <div
@@ -292,53 +310,63 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
               const isHidden = selectedSlug !== null && !isSelected;
 
               return (
-              <motion.li
-                key={slug}
-                layout
-                animate={
-                  isSelected
-                    ? { opacity: 1, scale: selectedCardScale, y: 0 }
-                    : isHidden
-                    ? { opacity: 0, scale: 0.96, y: 6 }
-                    : { opacity: 1, scale: 1, y: 0 }
-                }
-                transition={
-                  isHidden
-                    ? { duration: 0 }
-                    : { duration: 0.9, ease: [0.22, 1, 0.36, 1] }
-                }
-                className={`${cardSizeClass} min-w-0 ${
-                  isHidden ? "pointer-events-none absolute" : ""
-                }`}
-              >
-                <button
-                  type="button"
-                  onPointerDown={() => handleSelectProvider(slug)}
-                  onClick={() => handleSelectProvider(slug)}
-                  className={`${baseCardClass} ${cardPaddingClass} ${accentCardClass[accent]} w-full`}
+                <motion.li
+                  key={slug}
+                  layout
+                  animate={
+                    isSelected
+                      ? { opacity: 1, scale: selectedCardScale, y: 0 }
+                      : isHidden
+                      ? { opacity: 0, scale: 0.96, y: 6 }
+                      : { opacity: 1, scale: 1, y: 0 }
+                  }
+                  transition={
+                    isHidden
+                      ? { duration: 0 }
+                      : { duration: 0.9, ease: [0.22, 1, 0.36, 1] }
+                  }
+                  className={`${cardSizeClass} min-w-0 ${
+                    isHidden ? "pointer-events-none absolute" : ""
+                  }`}
                 >
-                  <span className={`relative flex min-w-0 max-w-full shrink items-center justify-center ${logoSize}`}>
-                    <Image
-                      src={logo}
-                      alt={name}
-                      width={imageSize.width}
-                      height={imageSize.height}
-                      className="h-full w-full scale-110 object-contain object-center transition-transform duration-300 md:group-hover:scale-[1.18]"
-                      priority
-                      sizes={`${imageSize.width}px`}
-                    />
-                  </span>
-                </button>
-                <p className={`mt-1 text-center font-heading text-[11px] font-semibold tracking-[0.08em] text-white/95 sm:text-xs ${selectedSlug ? "invisible" : ""}`}>
-                  {name}
-                </p>
-              </motion.li>
-            );
-          })}
+                  <button
+                    type="button"
+                    onPointerDown={() => handleSelectProvider(slug)}
+                    onClick={() => handleSelectProvider(slug)}
+                    className={`${baseCardClass} ${cardPaddingClass} ${accentCardClass[accent]} w-full`}
+                  >
+                    <span
+                      className={`relative flex min-w-0 max-w-full shrink items-center justify-center ${logoSize}`}
+                    >
+                      <Image
+                        src={logo}
+                        alt={name}
+                        width={imageSize.width}
+                        height={imageSize.height}
+                        className="h-full w-full scale-110 object-contain object-center transition-transform duration-300 md:group-hover:scale-[1.18]"
+                        priority
+                        sizes={`${imageSize.width}px`}
+                      />
+                    </span>
+                  </button>
+                  <p
+                    className={`mt-1 text-center font-heading text-[11px] font-semibold tracking-[0.08em] text-white/95 sm:text-xs ${
+                      selectedSlug ? "invisible" : ""
+                    }`}
+                  >
+                    {name}
+                  </p>
+                </motion.li>
+              );
+            })}
           </motion.ul>
         )}
+
         {selectedSlug && (
-          <div className={`w-full max-w-sm min-h-38 ${showOnlyLocationOnMobile ? "mt-2" : "mt-6"}`}>
+          <div
+            className={`w-full max-w-sm min-h-38 ${showOnlyLocationOnMobile ? "mt-2" : "mt-6"}`}
+          >
+            {/* Slogan step -> county step, swapped in-place to avoid layout jumps. */}
             <AnimatePresence mode="wait" initial={false}>
               {selectedProvider && !showLocationPrompt ? (
                 <motion.div
@@ -371,7 +399,9 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
                     <p className="text-center font-heading text-xl font-semibold tracking-wide text-white sm:text-2xl">
                       Where are you located?
                     </p>
+
                     <div className="relative mt-4">
+                      {/* Search field shell keeps icons perfectly centered cross-device. */}
                       <div
                         className={`relative z-10 flex h-12 w-full items-center rounded-2xl border bg-[rgb(25,28,41)] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition-all duration-300 ${
                           countyError
@@ -387,6 +417,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
                             />
                           </svg>
                         </span>
+
                         <input
                           ref={countyInputRef}
                           type="text"
@@ -400,15 +431,16 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
                           }}
                           onFocus={handleCountyFocus}
                           onBlur={handleCountyBlur}
-                        onKeyDown={(event) => {
-                          if (event.key !== "Enter") return;
-                          event.preventDefault();
-                          handleContinue();
-                        }}
+                          onKeyDown={(event) => {
+                            if (event.key !== "Enter") return;
+                            event.preventDefault();
+                            handleContinue();
+                          }}
                           autoComplete="off"
                           placeholder="Find your county..."
                           className="h-full min-w-0 flex-1 bg-transparent pr-2 text-sm leading-5 text-white placeholder:text-white/45 focus:outline-none"
                         />
+
                         <button
                           type="button"
                           aria-label="Toggle county suggestions"
@@ -430,8 +462,10 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
                           </svg>
                         </button>
                       </div>
+
                       {showCountySuggestions && countySuggestions.length > 0 && (
-                        <div className="county-suggestions-scroll absolute top-full z-50 -mt-15 w-full max-h-56 overflow-y-auto rounded-2xl border border-white/12 bg-[rgb(25,28,41)]/95 shadow-[0_12px_28px_rgba(0,0,0,0.38)] backdrop-blur-sm md:top-auto md:bottom-full md:mt-0 md:mb-1">
+                        // Mobile opens downward, desktop opens upward.
+                        <div className="county-suggestions-scroll absolute top-full z-50 -mt-20 w-full max-h-56 overflow-y-auto rounded-2xl border border-white/12 bg-[rgb(25,28,41)]/95 shadow-[0_12px_28px_rgba(0,0,0,0.38)] backdrop-blur-sm md:top-auto md:bottom-full md:mt-0 md:mb-1">
                           {countySuggestions.map((countyName) => (
                             <button
                               key={countyName}
@@ -450,9 +484,15 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
                           ))}
                         </div>
                       )}
-                      <p className={`mt-2 min-h-4 text-xs ${countyError ? "text-red-300" : "text-transparent"}`}>
+
+                      <p
+                        className={`mt-2 min-h-4 text-xs ${
+                          countyError ? "text-red-300" : "text-transparent"
+                        }`}
+                      >
                         {countyError ?? "."}
                       </p>
+
                       <button
                         type="button"
                         onMouseDown={(event) => event.preventDefault()}
@@ -470,6 +510,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
           </div>
         )}
       </motion.div>
+
       <AnimatePresence>
         {selectedSlug && showLocationPrompt && !showOnlyLocationOnMobile && (
           <motion.div
@@ -495,7 +536,9 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
                   transition={{ duration: 0.28, ease: "easeOut" }}
                   className={`${baseCardClass} ${accentCardClass[accent]} h-14 w-14 p-2.5 sm:h-16 sm:w-16`}
                 >
-                  <span className={`relative flex min-w-0 max-w-full shrink items-center justify-center ${logoSize}`}>
+                  <span
+                    className={`relative flex min-w-0 max-w-full shrink items-center justify-center ${logoSize}`}
+                  >
                     <Image
                       src={logo}
                       alt={name}
@@ -511,6 +554,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
           </motion.div>
         )}
       </AnimatePresence>
+
       {!selectedSlug && (
         <p className="home-provider-footnote mt-4 text-center text-xs text-white/70 md:mt-4">
           More providers coming soon.

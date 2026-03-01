@@ -15,8 +15,11 @@ export default function Home() {
 
       <section className={sectionClassName} aria-label="Choose your internet provider">
         <h1 className="home-provider-title relative z-20 mb-10 px-4 pt-6 text-center font-sans text-xl font-bold tracking-wide text-white sm:mb-8 sm:pt-8 md:mb-0 md:pt-0 md:text-3xl lg:text-4xl xl:text-5xl">
-          Choose Your Internet Provider
+          One Platform. All Major ISPs. Faster Installation
         </h1>
+        <p className="home-provider-title relative z-20 -mt-7 mb-8 px-5 text-center text-sm text-white/80 sm:-mt-5 sm:mb-6 sm:text-base md:mb-0 md:mt-2">
+          Tap a provider to get connected faster.
+        </p>
 
         <ProviderCardsPanel providers={providers} />
       </section>
