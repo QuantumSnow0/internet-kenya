@@ -49,7 +49,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
 
     const timeout = window.setTimeout(() => {
       setShowLocationPrompt(true);
-    }, 700);
+    }, 1300);
 
     return () => window.clearTimeout(timeout);
   }, [selectedSlug]);
@@ -82,6 +82,13 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
     setIsInputFocused(false);
   };
 
+  const remainingProviders = selectedSlug
+    ? providers.filter((provider) => provider.slug !== selectedSlug)
+    : [];
+  const selectedProvider = selectedSlug
+    ? providers.find((provider) => provider.slug === selectedSlug) ?? null
+    : null;
+
   const anchorY = selectedSlug
     ? isDesktop
       ? -20
@@ -91,6 +98,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
     : isDesktop
     ? 0
     : -40;
+  const selectedCardScale = isDesktop ? 1.42 : isMobileFocusMode ? 1.55 : 1.8;
 
   return (
     <div
@@ -100,7 +108,11 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
       <motion.div
         className="curve-cards-anchor relative mx-auto flex w-full max-w-3xl flex-col items-center justify-start gap-3 sm:gap-4 md:justify-center md:gap-4 lg:gap-5"
         animate={{ y: anchorY }}
-        transition={{ type: "spring", stiffness: 170, damping: 24, mass: 0.55 }}
+        transition={
+          isDesktop
+            ? { duration: 0.58, ease: [0.22, 1, 0.36, 1] }
+            : { type: "spring", stiffness: 170, damping: 24, mass: 0.55 }
+        }
       >
         {!showOnlyLocationOnMobile && (
           <motion.ul
@@ -122,7 +134,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
                 layout
                 animate={
                   isSelected
-                    ? { opacity: 1, scale: isMobileFocusMode ? 1.55 : 1.8, y: 0 }
+                    ? { opacity: 1, scale: selectedCardScale, y: 0 }
                     : isHidden
                     ? { opacity: 0, scale: 0.96, y: 6 }
                     : { opacity: 1, scale: 1, y: 0 }
@@ -162,44 +174,105 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
           })}
           </motion.ul>
         )}
-        <AnimatePresence>
-          {selectedSlug && showLocationPrompt && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 6 }}
-              transition={{ duration: 0.28, ease: "easeOut" }}
-              className={`w-full max-w-sm ${showOnlyLocationOnMobile ? "mt-2" : "mt-6"}`}
-            >
-              <p className="text-center font-heading text-xl font-semibold tracking-wide text-white sm:text-2xl">
-                Where are you located?
-              </p>
-              <div className="relative mt-4">
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 20 20"
-                  className="pointer-events-none absolute left-4 top-1/2 z-20 h-5 w-5 -translate-y-1/2 text-white/55"
+        {selectedSlug && (
+          <div className={`w-full max-w-sm min-h-38 ${showOnlyLocationOnMobile ? "mt-2" : "mt-6"}`}>
+            <AnimatePresence mode="wait" initial={false}>
+              {selectedProvider && !showLocationPrompt ? (
+                <motion.div
+                  key="provider-slogan"
+                  initial={{ opacity: 0, y: 14, filter: "blur(10px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: 8, filter: "blur(6px)" }}
+                  transition={{ duration: 0.52, ease: [0.16, 1, 0.3, 1] }}
+                  className="pt-2"
                 >
-                  <path
-                    d="M8.5 3a5.5 5.5 0 0 1 4.37 8.84l3.64 3.65a1 1 0 0 1-1.42 1.41l-3.64-3.64A5.5 5.5 0 1 1 8.5 3Zm0 2a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"
-                    fill="currentColor"
-                  />
-                </svg>
-                <input
-                  ref={countyInputRef}
-                  type="text"
-                  value={county}
-                  onChange={(event) => setCounty(event.target.value)}
-                  onFocus={handleCountyFocus}
-                  onBlur={handleCountyBlur}
-                  placeholder="Find your county..."
-                  className="relative z-10 w-full rounded-2xl border border-white/14 bg-[rgb(25,28,41)] py-3.5 pr-4 pl-12 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] placeholder:text-white/45 transition-all duration-300 focus:border-[rgb(58,66,96)] focus:shadow-[0_0_0_2px_rgba(58,66,96,0.35)] focus:outline-none"
-                />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  <motion.p
+                    initial={{ letterSpacing: "0.2em" }}
+                    animate={{ letterSpacing: "0.14em" }}
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    className="text-center font-heading text-base font-semibold text-white/92 drop-shadow-[0_8px_22px_rgba(0,0,0,0.42)] sm:text-lg"
+                  >
+                    {selectedProvider.slogan}
+                  </motion.p>
+                </motion.div>
+              ) : (
+                showLocationPrompt && (
+                  <motion.div
+                    key="location-step"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }}
+                    transition={{ duration: 0.28, ease: "easeOut" }}
+                    className="w-full"
+                  >
+                    <p className="text-center font-heading text-xl font-semibold tracking-wide text-white sm:text-2xl">
+                      Where are you located?
+                    </p>
+                    <div className="relative mt-4">
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 20 20"
+                        className="pointer-events-none absolute left-4 top-1/2 z-20 h-5 w-5 -translate-y-1/2 text-white/55"
+                      >
+                        <path
+                          d="M8.5 3a5.5 5.5 0 0 1 4.37 8.84l3.64 3.65a1 1 0 0 1-1.42 1.41l-3.64-3.64A5.5 5.5 0 1 1 8.5 3Zm0 2a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                      <input
+                        ref={countyInputRef}
+                        type="text"
+                        value={county}
+                        onChange={(event) => setCounty(event.target.value)}
+                        onFocus={handleCountyFocus}
+                        onBlur={handleCountyBlur}
+                        placeholder="Find your county..."
+                        className="relative z-10 w-full rounded-2xl border border-white/14 bg-[rgb(25,28,41)] py-3.5 pr-4 pl-12 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] placeholder:text-white/45 transition-all duration-300 focus:border-[rgb(58,66,96)] focus:shadow-[0_0_0_2px_rgba(58,66,96,0.35)] focus:outline-none"
+                      />
+                    </div>
+                  </motion.div>
+                )
+              )}
+            </AnimatePresence>
+          </div>
+        )}
       </motion.div>
+      <AnimatePresence>
+        {selectedSlug && showLocationPrompt && !showOnlyLocationOnMobile && (
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 14 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed bottom-[max(0.9rem,env(safe-area-inset-bottom))] left-1/2 z-40 flex w-max -translate-x-1/2 items-center justify-center gap-3"
+          >
+            {remainingProviders.map(({ slug, name, logo, accent, logoSize, imageSize }) => (
+              <motion.button
+                key={slug}
+                type="button"
+                onPointerDown={() => handleSelectProvider(slug)}
+                onClick={() => handleSelectProvider(slug)}
+                initial={{ opacity: 0, y: 14, scale: 0.92 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.92 }}
+                transition={{ duration: 0.28, ease: "easeOut" }}
+                className={`${baseCardClass} ${accentCardClass[accent]} h-14 w-14 p-2.5 sm:h-16 sm:w-16`}
+              >
+                <span className={`relative flex min-w-0 max-w-full shrink items-center justify-center ${logoSize}`}>
+                  <Image
+                    src={logo}
+                    alt={name}
+                    width={imageSize.width}
+                    height={imageSize.height}
+                    className="h-full w-full object-contain object-center"
+                    sizes="64px"
+                  />
+                </span>
+              </motion.button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
       {!selectedSlug && (
         <p className="home-provider-footnote mt-4 text-center text-xs text-white/70 md:mt-4">
           More providers coming soon.

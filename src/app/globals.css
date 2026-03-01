@@ -30,6 +30,7 @@ body {
 main {
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-gutter: stable;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -97,6 +98,12 @@ main {
   border-top-right-radius: 0 !important;
   padding-top: 0 !important;
   background: rgb(25, 28, 41) !important;
+}
+
+@media (min-width: 768px) {
+  .provider-selection-active main {
+    overflow-y: hidden;
+  }
 }
 
 
