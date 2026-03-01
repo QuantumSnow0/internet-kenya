@@ -1,82 +1,24 @@
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ProviderCountyStep } from "./_components/ProviderCountyStep";
+import { ProviderPageNoScroll } from "./_components/ProviderPageNoScroll";
 
-const PROVIDERS: Record<
-  string,
-  {
-    name: string;
-    description: string;
-    accent: "emerald" | "red" | "white";
-    logoSrc: string;
-    logoWidth: number;
-    logoHeight: number;
-  }
-> = {
-  safaricom: {
-    name: "Safaricom",
-    description: "View and sign up for Safaricom internet plans.",
-    accent: "emerald",
-    logoSrc: "/safaricom-logo.png",
-    logoWidth: 176,
-    logoHeight: 88,
-  },
-  airtel: {
-    name: "Airtel",
-    description: "View and sign up for Airtel internet plans.",
-    accent: "red",
-    logoSrc: "/airtel-logo.png",
-    logoWidth: 112,
-    logoHeight: 56,
-  },
-  faiba: {
-    name: "Faiba",
-    description: "View and sign up for Faiba internet plans.",
-    accent: "white",
-    logoSrc: "/faiba-logo.jpg",
-    logoWidth: 96,
-    logoHeight: 48,
-  },
-};
+const PROVIDER_SLUGS = ["safaricom", "airtel", "faiba"] as const;
+const PROVIDER_SET = new Set<string>(PROVIDER_SLUGS);
 
 export async function generateStaticParams() {
-  return Object.keys(PROVIDERS).map((slug) => ({ slug }));
+  return PROVIDER_SLUGS.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const provider = PROVIDERS[slug];
-  if (!provider) return { title: "Provider" };
-  return {
-    title: `${provider.name} – Internet plans`,
-    description: provider.description,
-  };
-}
-
-/**
- * Dynamic provider page controller:
- * shared routing + metadata with provider-specific content components.
- */
 export default async function ProviderPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const provider = PROVIDERS[slug];
-
-  if (!provider) notFound();
+  if (!PROVIDER_SET.has(slug)) notFound();
   return (
-    <ProviderCountyStep
-      providerName={provider.name}
-      logoSrc={provider.logoSrc}
-      logoWidth={provider.logoWidth}
-      logoHeight={provider.logoHeight}
-      accent={provider.accent}
-    />
+    <>
+      <ProviderPageNoScroll />
+      <section className="h-full min-h-0 bg-[rgb(25,28,41)]" />
+    </>
   );
 }

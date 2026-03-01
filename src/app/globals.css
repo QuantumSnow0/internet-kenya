@@ -106,4 +106,47 @@ main {
   }
 }
 
+.provider-input-focus-active main {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+.provider-page-no-scroll main {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+.county-suggestions-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(111, 123, 172, 0.78) rgba(255, 255, 255, 0.05);
+}
+
+.county-suggestions-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.county-suggestions-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+}
+
+.county-suggestions-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(140, 154, 214, 0.9),
+    rgba(98, 112, 168, 0.9)
+  );
+  border: 2px solid rgba(25, 28, 41, 0.92);
+  border-radius: 999px;
+}
+
+.county-suggestions-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(164, 176, 232, 0.96),
+    rgba(116, 132, 194, 0.96)
+  );
+}
+
 
