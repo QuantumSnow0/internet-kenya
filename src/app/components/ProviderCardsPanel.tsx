@@ -15,6 +15,11 @@ type ProviderCardsPanelProps = {
   providers: readonly ProviderCard[];
 };
 
+type SelectProviderOptions = {
+  preserveLocation?: boolean;
+  autoContinueWithLocation?: boolean;
+};
+
 const baseCardClass =
   "group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center overflow-hidden rounded-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[rgb(25,28,41)] sm:rounded-2xl";
 
@@ -30,6 +35,10 @@ const accentCardClass = {
 const LOCATION_PROMPT_DELAY_MS = 1300;
 const COUNTY_ERROR_MESSAGE = "Please select a county from the list.";
 const SWITCH_PROVIDER_AUTO_REDIRECT_DELAY_MS = 1500;
+const AUTO_SWITCH_PROVIDER_OPTIONS: SelectProviderOptions = {
+  preserveLocation: true,
+  autoContinueWithLocation: true,
+};
 
 export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
   const router = useRouter();
@@ -101,22 +110,17 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
   const cardSizeClass = "w-[5.5rem] sm:w-[6.25rem] md:w-24";
   const cardPaddingClass = "p-3 sm:p-4 md:p-4 lg:p-4";
 
-  const anchorY = selectedSlug
-    ? isDesktop
-      ? -20
-      : isMobileFocusMode
-      ? 0
-      : autoContinueAfterSwitch
-      ? 0
-      : -64
-    : isDesktop
-    ? 0
-    : -40;
-  const selectedCardScale = isDesktop
-    ? 1.42
-    : isMobileFocusMode || autoContinueAfterSwitch
-    ? 1.55
-    : 1.8;
+  const anchorY = (() => {
+    if (!selectedSlug) return isDesktop ? 0 : -40;
+    if (isDesktop) return -20;
+    if (isMobileFocusMode || autoContinueAfterSwitch) return 0;
+    return -64;
+  })();
+  const selectedCardScale = (() => {
+    if (isDesktop) return 1.42;
+    if (isMobileFocusMode || autoContinueAfterSwitch) return 1.55;
+    return 1.8;
+  })();
 
   // Toggles homepage "selected provider mode" styles in globals.css.
   useLayoutEffect(() => {
@@ -221,7 +225,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
   // Resets location-step state whenever provider changes.
   const handleSelectProvider = (
     slug: string,
-    options?: { preserveLocation?: boolean; autoContinueWithLocation?: boolean }
+    options?: SelectProviderOptions
   ) => {
     const preserveLocation = options?.preserveLocation === true;
     const autoContinueWithLocation = options?.autoContinueWithLocation === true;
@@ -284,10 +288,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
     }, 0);
 
     suppressCountyBlurRef.current = true;
-    handleSelectProvider(slug, {
-      preserveLocation: true,
-      autoContinueWithLocation: true,
-    });
+    handleSelectProvider(slug, AUTO_SWITCH_PROVIDER_OPTIONS);
   };
 
   // Gate navigation until county is valid, then pass county in querystring.
@@ -315,6 +316,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
       style={selectedSlug ? { backgroundColor: "rgb(25, 28, 41)" } : undefined}
     >
       <motion.div
+        initial={false}
         className="curve-cards-anchor relative mx-auto flex w-full max-w-3xl flex-col items-center justify-start gap-3 sm:gap-4 md:justify-center md:gap-4 lg:gap-5"
         animate={{ y: anchorY }}
         transition={
@@ -325,6 +327,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
       >
         {!showOnlyLocationOnMobile && (
           <motion.ul
+            initial={false}
             layout
             transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
             className={`relative flex w-full ${
