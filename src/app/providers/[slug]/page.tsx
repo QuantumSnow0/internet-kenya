@@ -2,8 +2,16 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getCountiesForProvider } from "@/app/data/locationCoverage";
 import { providers } from "@/app/data/providers";
+import {
+  getRecommendedTieredPlans,
+  getSafaricom5GDevicePricing,
+  getSafaricom5GPlans,
+  getSafaricomTieredPlans,
+} from "@/app/data/safaricomPlans";
 import { ProviderLocationSelect } from "./_components/ProviderLocationSelect";
-import { ProviderPageNoScroll } from "./_components/ProviderPageNoScroll";
+import { FiveGPlansSection } from "./_components/FiveGPlansSection";
+import { RecommendedDeals } from "./_components/RecommendedDeals";
+import { TierUnlimitedPlansSection } from "./_components/TierUnlimitedPlansSection";
 import { ProviderValueComparison } from "./_components/ProviderValueComparison";
 
 const PROVIDER_SLUGS = providers.map((provider) => provider.slug);
@@ -40,11 +48,21 @@ export default async function ProviderPage({
   const county = decodeURIComponent(getSingleQueryValue(query.county)).trim();
   const allowedCounties = getCountiesForProvider(provider.slug);
 
+  // Recommended deals: tiered plans with offers. Later from DB/CMS; title configurable.
+  const recommendedTitle = "❤️ Deals you will like";
+  const recommendedPlans =
+    provider.slug === "safaricom" ? getRecommendedTieredPlans() : [];
+  const fiveGPlans =
+    provider.slug === "safaricom" ? getSafaricom5GPlans() : [];
+  const fiveGDevicePricing =
+    provider.slug === "safaricom" ? getSafaricom5GDevicePricing() : null;
+  const tieredUnlimitedPlans =
+    provider.slug === "safaricom" ? getSafaricomTieredPlans() : [];
+
   return (
     <>
-      <ProviderPageNoScroll />
-      <section className="h-full min-h-0 bg-[rgb(25,28,41)] px-4 pt-3 sm:px-6 sm:pt-4">
-        <header className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-2 border-b border-white/15 pb-3 max-[320px]:grid-cols-1">
+      <section className="min-h-0 bg-[rgb(25,28,41)] -mx-4 px-3 pt-3 sm:mx-0 sm:px-6 sm:pt-4">
+        <header className="sticky top-0 z-10 grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-2 border-b border-white/15 bg-[rgb(25,28,41)] pb-3 max-[320px]:grid-cols-1">
           <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
             <div
               className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-linear-to-b p-2 shadow-[0_6px_16px_rgba(0,0,0,0.22)] max-[320px]:hidden ${providerAccentClass[provider.accent]}`}
@@ -86,6 +104,18 @@ export default async function ProviderPage({
             county={county.length > 0 ? county : undefined}
           />
         </div>
+        {recommendedPlans.length > 0 && (
+          <RecommendedDeals title={recommendedTitle} items={recommendedPlans} />
+        )}
+        {fiveGPlans.length > 0 && (
+          <FiveGPlansSection
+            plans={fiveGPlans}
+            devicePricing={fiveGDevicePricing}
+          />
+        )}
+        {tieredUnlimitedPlans.length > 0 && (
+          <TierUnlimitedPlansSection plans={tieredUnlimitedPlans} />
+        )}
       </section>
     </>
   );

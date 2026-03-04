@@ -64,6 +64,10 @@ export type ProductLineFiveG = ProductLineBase & {
   kind: "fiveG";
   plans: FiveGPlan[];
   fupNote?: string;
+  /** Original device/router price (KES). */
+  devicePriceOriginalKes?: number;
+  /** Discounted device price (KES). */
+  devicePriceDiscountedKes?: number;
 };
 
 export type SafaricomProductLine =
@@ -173,6 +177,8 @@ export const safaricomProductLines: SafaricomProductLine[] = [
     audience: "Home / on-the-go",
     fupNote:
       "Primary bundle = 60% of data cap; FUP bundle = 40%. After FUP, speed drops to FUP speed.",
+    devicePriceOriginalKes: 10_000,
+    devicePriceDiscountedKes: 2_999,
     plans: [
       {
         name: "5G 10 Mbps",
@@ -233,4 +239,54 @@ export function getSafaricom15MbpsHomePrice(): number | null {
   const plans = getSafaricomHomeFiberPlans();
   const plan = plans.find((p) => p.speedMbps === 15);
   return plan?.priceKes ?? null;
+}
+
+/** All tiered plans (Bronze–Platinum) for "Tier unlimited plans" section. */
+export function getSafaricomTieredPlans(): TieredPlan[] {
+  const line = safaricomProductLines.find(
+    (l) => l.id === "tiered" && l.kind === "tiered"
+  ) as ProductLineTiered | undefined;
+  return line?.plans ?? [];
+}
+
+/** Recommended/featured tiered plans (with offers). Excludes Platinum (no promo). Later driven by DB. */
+export function getRecommendedTieredPlans(): TieredPlan[] {
+  const plans = getSafaricomTieredPlans();
+  return plans.filter((p) => p.tier !== "Platinum");
+}
+
+/** 5G data plans for the provider page. */
+export function getSafaricom5GPlans(): FiveGPlan[] {
+  const line = safaricomProductLines.find(
+    (l) => l.id === "fiveG" && l.kind === "fiveG"
+  ) as ProductLineFiveG | undefined;
+  return line?.plans ?? [];
+}
+
+/** FUP note for 5G plans (e.g. primary bundle 60%, FUP 40%). */
+export function getSafaricom5GFupNote(): string | undefined {
+  const line = safaricomProductLines.find(
+    (l) => l.id === "fiveG" && l.kind === "fiveG"
+  ) as ProductLineFiveG | undefined;
+  return line?.fupNote;
+}
+
+/** 5G device/router pricing (discounted). */
+export function getSafaricom5GDevicePricing(): {
+  originalKes: number;
+  discountedKes: number;
+} | null {
+  const line = safaricomProductLines.find(
+    (l) => l.id === "fiveG" && l.kind === "fiveG"
+  ) as ProductLineFiveG | undefined;
+  if (
+    line?.devicePriceOriginalKes != null &&
+    line?.devicePriceDiscountedKes != null
+  ) {
+    return {
+      originalKes: line.devicePriceOriginalKes,
+      discountedKes: line.devicePriceDiscountedKes,
+    };
+  }
+  return null;
 }

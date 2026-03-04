@@ -157,4 +157,10 @@ main {
   display: none;
 }
 
+.recommended-deals-row {
+  scrollbar-width: none;
+}
 
+.recommended-deals-row::-webkit-scrollbar {
+  display: none;
+}
