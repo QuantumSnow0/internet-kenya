@@ -96,3 +96,8 @@ export function getUnsupportedLocationMessage(
   if (isLocationSupportedForProvider(providerSlug, location)) return null;
   return `Airtel isn't available in ${location.trim()} yet.`;
 }
+
+export function getCountiesForProvider(providerSlug: string): readonly string[] {
+  if (providerSlug !== "airtel") return kenyaCounties;
+  return kenyaCounties.filter((county) => isLocationSupportedForProvider(providerSlug, county));
+}
