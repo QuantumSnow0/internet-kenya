@@ -73,7 +73,7 @@ export function ProviderValueComparison({
                 {displayValue}
               </span>
               <span className="text-[10px] text-white/50" aria-hidden>
-                KSh/Mb
+                KSh/Mbps
               </span>
             </div>
             {isCheaperThanCurrent && (

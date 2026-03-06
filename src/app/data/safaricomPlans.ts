@@ -290,3 +290,12 @@ export function getSafaricom5GDevicePricing(): {
   }
   return null;
 }
+
+/** Get a fiber product line by id (Home Fiber, Business Fiber, Dedicated WiFi). */
+export function getSafaricomFiberLine(
+  id: "homeFiber" | "businessFiber" | "dedicatedWifi"
+): ProductLineFiber | undefined {
+  return safaricomProductLines.find(
+    (l) => l.id === id && l.kind === "fiber"
+  ) as ProductLineFiber | undefined;
+}

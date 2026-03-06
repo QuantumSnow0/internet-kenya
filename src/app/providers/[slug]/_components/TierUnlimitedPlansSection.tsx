@@ -35,8 +35,8 @@ export function TierUnlimitedPlansSection({ plans }: TierUnlimitedPlansSectionPr
   if (plans.length === 0) return null;
 
   return (
-    <div className="mt-8 sm:mt-10">
-      <div className="mb-4 flex items-center gap-2">
+    <div className="mt-4 sm:mt-5">
+      <div className="mb-2 flex flex-wrap items-center gap-2">
         <h2 className="text-base font-semibold tracking-tight text-white sm:text-lg">
           Tier unlimited plans
         </h2>
@@ -44,7 +44,10 @@ export function TierUnlimitedPlansSection({ plans }: TierUnlimitedPlansSectionPr
           Unlimited data
         </span>
       </div>
-      <div className="recommended-deals-row flex gap-3 overflow-x-auto pb-1 sm:gap-4">
+      <p className="mb-3 text-xs text-white/70 sm:text-sm">
+        Free router included
+      </p>
+      <div className="recommended-deals-row flex gap-3 overflow-x-auto overflow-y-hidden pb-6 sm:gap-4">
         {plans.map((plan) => {
           const accent = tierAccent[plan.tier] ?? {
             number: "text-white/80",
@@ -53,7 +56,7 @@ export function TierUnlimitedPlansSection({ plans }: TierUnlimitedPlansSectionPr
           return (
             <div
               key={plan.tier}
-              className={`flex min-w-40 shrink-0 flex-col rounded-2xl border bg-linear-to-br ${accent.card} px-4 py-4 shadow-[0_4px_24px_rgba(0,0,0,0.25)] transition-all duration-200 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:scale-[1.02] active:scale-[0.99] sm:min-w-48 sm:px-5 sm:py-5`}
+              className={`relative flex min-w-40 shrink-0 flex-col rounded-2xl border bg-linear-to-br ${accent.card} px-4 py-4 pb-8 shadow-[0_4px_24px_rgba(0,0,0,0.25)] transition-all duration-200 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:scale-[1.02] active:scale-[0.99] sm:min-w-36 sm:px-4 sm:py-4`}
             >
               <div className="flex items-center gap-2 sm:gap-3">
                 <span
@@ -82,10 +85,13 @@ export function TierUnlimitedPlansSection({ plans }: TierUnlimitedPlansSectionPr
                     was {plan.priceOriginalKes.toLocaleString("en-KE")} KSh
                   </span>
                 )}
-                <span className="mt-1.5 block text-[10px] font-medium text-emerald-400/90 sm:text-xs">
-                  Unlimited data
-                </span>
               </div>
+              <button
+                type="button"
+                className="absolute bottom-0 left-1/2 min-w-28 -translate-x-1/2 translate-y-1/2 rounded-lg bg-white/15 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/25 active:bg-white/20"
+              >
+                Apply now
+              </button>
             </div>
           );
         })}
