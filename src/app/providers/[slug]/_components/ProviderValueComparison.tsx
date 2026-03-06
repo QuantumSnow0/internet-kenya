@@ -6,17 +6,12 @@ import {
   getUnsupportedLocationMessage,
   isLocationSupportedForProvider,
 } from "@/app/data/locationCoverage";
+import { providerLogoAccent } from "@/app/data/providerAccents";
 import { providers } from "@/app/data/providers";
 import {
   getProviderKesPerMbps,
   getProviderSlugsWithValue,
 } from "@/app/data/providerValueComparison";
-
-const providerAccentClass: Record<string, string> = {
-  emerald: "from-emerald-300 via-emerald-100 to-white",
-  red: "from-red-300 via-red-100 to-white",
-  white: "from-neutral-300 via-neutral-100 to-white",
-};
 
 type ProviderValueComparisonProps = {
   currentSlug: string;
@@ -57,7 +52,7 @@ export function ProviderValueComparison({
         const cardContent = (
           <>
             <div
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-linear-to-b p-1 shadow-md md:h-11 md:w-11 ${providerAccentClass[provider.accent] ?? ""}`}
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-linear-to-b p-1 shadow-md md:h-11 md:w-11 ${providerLogoAccent[provider.accent] ?? ""}`}
             >
               <Image
                 src={provider.logo}

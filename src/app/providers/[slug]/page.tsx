@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getCountiesForProvider } from "@/app/data/locationCoverage";
+import { providerLogoAccent } from "@/app/data/providerAccents";
 import { providers } from "@/app/data/providers";
 import {
   getRecommendedTieredPlans,
@@ -18,11 +19,6 @@ import { ProviderValueComparison } from "./_components/ProviderValueComparison";
 
 const PROVIDER_SLUGS = providers.map((provider) => provider.slug);
 const PROVIDER_SET = new Set<string>(PROVIDER_SLUGS);
-const providerAccentClass = {
-  emerald: "from-emerald-300 via-emerald-100 to-white",
-  red: "from-red-300 via-red-100 to-white",
-  white: "from-neutral-300 via-neutral-100 to-white",
-} as const;
 
 function getSingleQueryValue(value: string | string[] | undefined) {
   if (typeof value === "string") return value;
@@ -72,7 +68,7 @@ export default async function ProviderPage({
       <header className="sticky top-0 z-10 grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-2 border-b border-white/15 bg-[rgb(25,28,41)] px-3 pb-3 pt-3 max-[320px]:grid-cols-1 sm:px-6">
         <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
           <div
-            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-linear-to-b p-2 shadow-[0_6px_16px_rgba(0,0,0,0.22)] max-[320px]:hidden ${providerAccentClass[provider.accent]}`}
+            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-linear-to-b p-2 shadow-[0_6px_16px_rgba(0,0,0,0.22)] max-[320px]:hidden ${providerLogoAccent[provider.accent]}`}
           >
             <Image
               src={provider.logo}

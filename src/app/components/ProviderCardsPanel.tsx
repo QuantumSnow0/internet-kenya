@@ -9,6 +9,7 @@ import {
   isLocationSupportedForProvider,
   kenyaCounties,
 } from "../data/locationCoverage";
+import { providerCardAccent } from "../data/providerAccents";
 import type { ProviderCard } from "../data/providers";
 
 type ProviderCardsPanelProps = {
@@ -22,14 +23,6 @@ type SelectProviderOptions = {
 
 const baseCardClass =
   "group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center overflow-hidden rounded-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[rgb(25,28,41)] sm:rounded-2xl";
-
-const accentCardClass = {
-  emerald:
-    "bg-gradient-to-b from-emerald-300 via-emerald-100 to-white shadow-lg shadow-black/15 md:hover:scale-[1.04] md:hover:from-emerald-400 md:hover:via-emerald-200 md:hover:to-white md:hover:shadow-xl md:hover:shadow-black/20 focus:ring-white",
-  red: "bg-gradient-to-b from-red-300 via-red-100 to-white shadow-lg shadow-black/15 md:hover:scale-[1.04] md:hover:from-red-400 md:hover:via-red-200 md:hover:to-white md:hover:shadow-xl md:hover:shadow-black/20 focus:ring-white",
-  white:
-    "bg-gradient-to-b from-neutral-300 via-neutral-100 to-white shadow-lg shadow-black/15 md:hover:scale-[1.04] md:hover:from-neutral-400 md:hover:via-neutral-200 md:hover:to-white md:hover:shadow-xl md:hover:shadow-black/20 focus:ring-white",
-} as const;
 
 // Canonical county list used for suggestions + strict validation.
 const LOCATION_PROMPT_DELAY_MS = 1300;
@@ -363,7 +356,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
                   <button
                     type="button"
                     onClick={() => handleSelectProvider(slug)}
-                    className={`${baseCardClass} ${cardPaddingClass} ${accentCardClass[accent]} w-full`}
+                    className={`${baseCardClass} ${cardPaddingClass} ${providerCardAccent[accent]} w-full`}
                   >
                     <span
                       className={`relative flex min-w-0 max-w-full shrink items-center justify-center ${logoSize}`}
@@ -570,7 +563,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
                                   initial={{ opacity: 0, y: 10, scale: 0.94 }}
                                   animate={{ opacity: 1, y: 0, scale: 1 }}
                                   transition={{ duration: 0.24, ease: "easeOut" }}
-                                  className={`${baseCardClass} ${accentCardClass[accent]} h-12 w-12 rounded-none p-1.5 sm:h-14 sm:w-14 sm:rounded-none sm:p-2`}
+                                  className={`${baseCardClass} ${providerCardAccent[accent]} h-12 w-12 rounded-none p-1.5 sm:h-14 sm:w-14 sm:rounded-none sm:p-2`}
                                 >
                                   <span
                                     className={`relative flex min-w-0 max-w-full shrink items-center justify-center ${logoSize}`}
@@ -624,7 +617,7 @@ export function ProviderCardsPanel({ providers }: ProviderCardsPanelProps) {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.92 }}
                   transition={{ duration: 0.28, ease: "easeOut" }}
-                  className={`${baseCardClass} ${accentCardClass[accent]} h-14 w-14 rounded-none p-2.5 sm:h-16 sm:w-16 sm:rounded-none`}
+                  className={`${baseCardClass} ${providerCardAccent[accent]} h-14 w-14 rounded-none p-2.5 sm:h-16 sm:w-16 sm:rounded-none`}
                 >
                   <span
                     className={`relative flex min-w-0 max-w-full shrink items-center justify-center ${logoSize}`}

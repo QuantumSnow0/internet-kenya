@@ -1,5 +1,6 @@
 "use client";
 
+import { ApplyNowButton } from "./ApplyNowButton";
 import type { FiveGPlan } from "@/app/data/safaricomPlans";
 
 type FiveGPlansSectionProps = {
@@ -72,17 +73,7 @@ export function FiveGPlansSection({ plans, devicePricing }: FiveGPlansSectionPro
                 </div>
               </div>
             </div>
-            <div
-              className="absolute bottom-0 left-1/2 min-w-28 -translate-x-1/2 translate-y-1/4 rounded-lg bg-[var(--background)]"
-              aria-hidden
-            >
-              <button
-                type="button"
-                className="w-full rounded-lg border border-violet-400/30 bg-violet-500/25 px-4 py-2 text-xs font-semibold text-violet-100 transition-colors hover:bg-violet-500/35 hover:border-violet-400/50 active:bg-violet-500/30"
-              >
-                Apply now
-              </button>
-            </div>
+            <ApplyNowButton buttonClassName="border-violet-400/30 bg-violet-500/25 text-violet-100 hover:bg-violet-500/35 hover:border-violet-400/50 active:bg-violet-500/30" />
           </div>
         ))}
       </div>
