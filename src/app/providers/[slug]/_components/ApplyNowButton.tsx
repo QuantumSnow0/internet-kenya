@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 type ApplyNowButtonProps = {
   /** Theme classes for the button (e.g. violet, sky, or tier accent). */
@@ -15,7 +15,10 @@ export function ApplyNowButton({
   children = "Apply now",
 }: ApplyNowButtonProps) {
   const pathname = usePathname();
-  const applyHref = pathname?.endsWith("/apply") ? pathname : `${pathname}/apply`;
+  const searchParams = useSearchParams();
+  const baseApply = pathname?.endsWith("/apply") ? pathname : `${pathname}/apply`;
+  const query = searchParams?.toString() ? `?${searchParams.toString()}` : "";
+  const applyHref = `${baseApply}${query}`;
 
   return (
     <div

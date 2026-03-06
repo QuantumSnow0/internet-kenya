@@ -9,19 +9,33 @@ export async function generateStaticParams() {
   return PROVIDER_SLUGS.map((slug) => ({ slug }));
 }
 
+function getSingleQueryValue(value: string | string[] | undefined) {
+  if (typeof value === "string") return value;
+  if (Array.isArray(value)) return value[0] ?? "";
+  return "";
+}
+
 export default async function ApplyPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ county?: string | string[] }>;
 }) {
   const { slug } = await params;
   if (!PROVIDER_SET.has(slug)) notFound();
+
+  const query = await searchParams;
+  const county = getSingleQueryValue(query.county);
+  const backHref = county
+    ? `/providers/${slug}?county=${encodeURIComponent(county)}`
+    : `/providers/${slug}`;
 
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-10 border-b border-white/15 bg-background px-3 py-3 sm:px-6">
         <Link
-          href={`/providers/${slug}`}
+          href={backHref}
           className="inline-flex items-center gap-2 text-sm font-medium text-white/90 transition-colors hover:text-white"
         >
           <svg
