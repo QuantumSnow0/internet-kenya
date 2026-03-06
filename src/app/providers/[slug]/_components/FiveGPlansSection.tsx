@@ -35,7 +35,7 @@ export function FiveGPlansSection({ plans, devicePricing }: FiveGPlansSectionPro
         {plans.map((plan) => (
           <div
             key={plan.name}
-            className="relative flex min-w-40 shrink-0 flex-col rounded-2xl border border-white/10 bg-linear-to-b from-violet-500/8 to-transparent px-4 py-4 pb-8 shadow-[0_4px_24px_rgba(0,0,0,0.25)] transition-all duration-200 hover:border-violet-400/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:scale-[1.02] active:scale-[0.99] sm:min-w-36 sm:px-4 sm:py-4"
+            className="relative flex min-w-40 shrink-0 flex-col rounded-2xl border border-white/10 bg-linear-to-b from-violet-500/8 to-transparent px-4 py-4 pb-8 sm:pb-12 shadow-[0_4px_24px_rgba(0,0,0,0.25)] transition-all duration-200 hover:border-violet-400/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:scale-[1.02] active:scale-[0.99] sm:min-w-36 sm:px-4 sm:py-4"
           >
             <div className="flex flex-wrap items-baseline gap-1.5">
               <span className="text-2xl font-extrabold tabular-nums tracking-tight text-white sm:text-3xl">
@@ -72,12 +72,17 @@ export function FiveGPlansSection({ plans, devicePricing }: FiveGPlansSectionPro
                 </div>
               </div>
             </div>
-            <button
-              type="button"
-              className="absolute bottom-0 left-1/2 min-w-28 -translate-x-1/2 translate-y-1/2 rounded-lg bg-white/15 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/25 active:bg-white/20"
+            <div
+              className="absolute bottom-0 left-1/2 min-w-28 -translate-x-1/2 translate-y-1/4 rounded-lg bg-[var(--background)]"
+              aria-hidden
             >
-              Apply now
-            </button>
+              <button
+                type="button"
+                className="w-full rounded-lg border border-violet-400/30 bg-violet-500/25 px-4 py-2 text-xs font-semibold text-violet-100 transition-colors hover:bg-violet-500/35 hover:border-violet-400/50 active:bg-violet-500/30"
+              >
+                Apply now
+              </button>
+            </div>
           </div>
         ))}
       </div>
