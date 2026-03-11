@@ -57,11 +57,11 @@ export function FiberPlansSection({
               <p className="font-mono text-lg font-bold text-white sm:text-xl">
                 {plan.priceKes.toLocaleString("en-KE")}
                 <span className="ml-0.5 text-xs font-normal text-white/50">
-                  KSh/mo
+                  KSh/month
                 </span>
               </p>
             </div>
-            <ApplyNowButton buttonClassName="border-sky-400/30 bg-sky-500/25 text-sky-100 hover:bg-sky-500/35 hover:border-sky-400/50 active:bg-sky-500/30" />
+            <ApplyNowButton planName={title} speedLabel={`${plan.speedMbps} Mbps`} priceLabel={`${plan.priceKes.toLocaleString("en-KE")} KSh/month`} devicePriceLabel="Free" buttonClassName="border-sky-400/30 bg-sky-500/25 text-sky-100 hover:bg-sky-500/35 hover:border-sky-400/50 active:bg-sky-500/30" />
           </div>
         ))}
       </div>

@@ -52,7 +52,7 @@ export function TierUnlimitedPlansSection({ plans }: TierUnlimitedPlansSectionPr
                 <p className="font-mono text-lg font-bold text-white sm:text-xl">
                   {plan.priceCurrentKes.toLocaleString("en-KE")}
                   <span className="ml-0.5 text-xs font-normal text-white/50">
-                    KSh/mo
+                    KSh/month
                   </span>
                 </p>
                 {plan.priceOriginalKes != null && (
@@ -61,7 +61,7 @@ export function TierUnlimitedPlansSection({ plans }: TierUnlimitedPlansSectionPr
                   </span>
                 )}
               </div>
-              <ApplyNowButton buttonClassName={accent.button} />
+              <ApplyNowButton planName="Tier unlimited plans" speedLabel={`${plan.speedMbps} Mbps`} priceLabel={`${plan.priceCurrentKes.toLocaleString("en-KE")} KSh/month`} devicePriceLabel="Free" buttonClassName={accent.button} />
             </div>
           );
         })}

@@ -55,7 +55,7 @@ export function FiveGPlansSection({ plans, devicePricing }: FiveGPlansSectionPro
               <p className="font-mono text-lg font-bold text-white sm:text-xl">
                 {plan.priceKes.toLocaleString("en-KE")}
                 <span className="ml-0.5 text-xs font-normal text-white/50">
-                  KSh/mo
+                  KSh/month
                 </span>
               </p>
               <div className="mt-3 space-y-1.5 text-[10px] sm:text-xs">
@@ -73,7 +73,19 @@ export function FiveGPlansSection({ plans, devicePricing }: FiveGPlansSectionPro
                 </div>
               </div>
             </div>
-            <ApplyNowButton buttonClassName="border-violet-400/30 bg-violet-500/25 text-violet-100 hover:bg-violet-500/35 hover:border-violet-400/50 active:bg-violet-500/30" />
+            <ApplyNowButton
+              planName="5G data plans"
+              speedLabel={`${plan.speedMbps} Mbps`}
+              priceLabel={`${plan.priceKes.toLocaleString("en-KE")} KSh/month`}
+              devicePriceLabel={
+                devicePricing
+                  ? devicePricing.discountedKes === 0
+                    ? "Free"
+                    : `${devicePricing.discountedKes.toLocaleString("en-KE")} KSh`
+                  : undefined
+              }
+              buttonClassName="border-violet-400/30 bg-violet-500/25 text-violet-100 hover:bg-violet-500/35 hover:border-violet-400/50 active:bg-violet-500/30"
+            />
           </div>
         ))}
       </div>

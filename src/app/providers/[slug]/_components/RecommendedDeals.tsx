@@ -59,7 +59,7 @@ export function RecommendedDeals({ title, items }: RecommendedDealsProps) {
                 <p className="font-mono text-lg font-bold text-white sm:text-xl">
                   {item.priceCurrentKes.toLocaleString("en-KE")}
                   <span className="ml-0.5 text-xs font-normal text-white/50">
-                    KSh/mo
+                    KSh/month
                   </span>
                 </p>
                 {item.priceOriginalKes != null && (
@@ -68,7 +68,7 @@ export function RecommendedDeals({ title, items }: RecommendedDealsProps) {
                   </span>
                 )}
               </div>
-              <ApplyNowButton buttonClassName={accent.button} />
+              <ApplyNowButton planName={title} speedLabel={`${item.speedMbps} Mbps`} priceLabel={`${item.priceCurrentKes.toLocaleString("en-KE")} KSh/month`} devicePriceLabel="Free" buttonClassName={accent.button} />
             </div>
           );
         })}

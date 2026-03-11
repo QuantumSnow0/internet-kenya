@@ -26,40 +26,51 @@ body {
   font-family: var(--font-dm-sans), system-ui, sans-serif;
 }
 
-/* Scrollable main area: works on mobile with momentum; styled vertical scrollbar */
+/* Scrollable main area: works on mobile with momentum */
 main {
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-gutter: stable;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.28) rgba(255, 255, 255, 0.06);
 }
 
-main::-webkit-scrollbar {
-  width: 8px;
+/* Hide scrollbars on mobile; show thin scrollbar on desktop */
+@media (max-width: 767px) {
+  main {
+    scrollbar-width: none;
+  }
+  main::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-main::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 999px;
-}
-
-main::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.35),
-    rgba(255, 255, 255, 0.2)
-  );
-  border-radius: 999px;
-}
-
-main::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.45),
-    rgba(255, 255, 255, 0.28)
-  );
+@media (min-width: 768px) {
+  main {
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.28) rgba(255, 255, 255, 0.06);
+  }
+  main::-webkit-scrollbar {
+    width: 8px;
+  }
+  main::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+  }
+  main::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.35),
+      rgba(255, 255, 255, 0.2)
+    );
+    border-radius: 999px;
+  }
+  main::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.45),
+      rgba(255, 255, 255, 0.28)
+    );
+  }
 }
 
 /* Section below carousel: wrapper (no curve), title sits on carousel */
@@ -179,29 +190,15 @@ main::-webkit-scrollbar-thumb:hover {
   display: none;
 }
 
-/* Horizontal card rows: constrain width so they scroll on desktop; slim scrollbar */
+/* Horizontal card rows: constrain width, scroll; hide scrollbar (touch scroll still works) */
 .recommended-deals-row {
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.22) rgba(255, 255, 255, 0.05);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .recommended-deals-row::-webkit-scrollbar {
-  height: 5px;
-}
-
-.recommended-deals-row::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 999px;
-}
-
-.recommended-deals-row::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.22);
-  border-radius: 999px;
-}
-
-.recommended-deals-row::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.32);
+  display: none;
 }
