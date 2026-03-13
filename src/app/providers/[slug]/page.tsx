@@ -124,7 +124,8 @@ export default async function ProviderPage({
         {tieredUnlimitedPlans.length > 0 && (
           <TierUnlimitedPlansSection plans={tieredUnlimitedPlans} />
         )}
-        {homeFiberLine && (
+        
+        {/* {homeFiberLine && (
           <FiberPlansSection
             title={homeFiberLine.name}
             tagline={homeFiberLine.tagline}
@@ -132,15 +133,15 @@ export default async function ProviderPage({
             plans={homeFiberLine.plans}
             pill="Uncapped"
           />
-        )}
-        {businessFiberLine && (
+        )} */}
+        {/* {businessFiberLine && (
           <FiberPlansSection
             title={businessFiberLine.name}
             note={businessFiberLine.audience ? `For ${businessFiberLine.audience.toLowerCase()}.` : undefined}
             plans={businessFiberLine.plans}
             pill="Uncapped"
           />
-        )}
+        )} */}
         {dedicatedWifiLine && (
           <FiberPlansSection
             title={dedicatedWifiLine.name}

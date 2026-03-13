@@ -49,7 +49,7 @@ export default function PrivacyPage() {
         <h2 className={headingClass}>3. Sharing with third parties</h2>
         <p className={paraClass}>
           When you submit an application (e.g. for Airtel or another provider), the data you
-          provide may be sent to that provider or their systems (such as Microsoft Forms). Each
+          provide may be sent to that provider or their systems. Each
           provider has its own privacy policy governing how they use your data. We do not sell
           your personal information to third parties for marketing.
         </p>

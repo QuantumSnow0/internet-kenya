@@ -16,7 +16,7 @@ export function TierUnlimitedPlansSection({ plans }: TierUnlimitedPlansSectionPr
     <div className="mt-4 sm:mt-5">
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <h2 className="text-base font-semibold tracking-tight text-white sm:text-lg">
-          Tier unlimited plans
+          Fiber Plans (Home & Business)
         </h2>
         <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-400 sm:text-xs">
           Unlimited data
