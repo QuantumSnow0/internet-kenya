@@ -7,11 +7,25 @@ type FiveGPlansSectionProps = {
   plans: FiveGPlan[];
   /** Device/router original and discounted price (shown once in section). */
   devicePricing?: { originalKes: number; discountedKes: number } | null;
+  /** Card/button accent: violet (Safaricom) or red (Airtel). */
+  accent?: "violet" | "red";
 };
 
-/** 5G plan cards: speed, price, primary/FUP data. No plan name (speed is enough). Device discount shown once. */
-export function FiveGPlansSection({ plans, devicePricing }: FiveGPlansSectionProps) {
+const cardStyles = {
+  violet: {
+    card: "border-white/10 bg-linear-to-b from-violet-500/8 to-transparent hover:border-violet-400/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
+    button: "border-violet-400/30 bg-violet-500/25 text-violet-100 hover:bg-violet-500/35 hover:border-violet-400/50 active:bg-violet-500/30",
+  },
+  red: {
+    card: "border-white/10 bg-linear-to-b from-red-500/8 to-transparent hover:border-red-400/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
+    button: "border-red-400/30 bg-red-500/25 text-red-100 hover:bg-red-500/35 hover:border-red-400/50 active:bg-red-500/30",
+  },
+};
+
+/** 5G plan cards: speed, price. Device discount shown once when provided. */
+export function FiveGPlansSection({ plans, devicePricing, accent = "violet" }: FiveGPlansSectionProps) {
   if (plans.length === 0) return null;
+  const style = cardStyles[accent];
 
   return (
     <div className="mt-4 sm:mt-5">
@@ -19,9 +33,6 @@ export function FiveGPlansSection({ plans, devicePricing }: FiveGPlansSectionPro
         <h2 className="text-base font-semibold tracking-tight text-white sm:text-lg">
           5G data plans
         </h2>
-        <span className="rounded-full bg-violet-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-violet-300 sm:text-xs">
-          Data-capped
-        </span>
       </div>
       {devicePricing && (
         <p className="mb-4 text-xs text-white/70 sm:text-sm">
@@ -32,11 +43,11 @@ export function FiveGPlansSection({ plans, devicePricing }: FiveGPlansSectionPro
           → <span className="font-semibold text-emerald-400">{devicePricing.discountedKes.toLocaleString("en-KE")} KSh</span>
         </p>
       )}
-      <div className="recommended-deals-row flex gap-3 overflow-x-auto overflow-y-hidden pb-6 sm:gap-4">
+      <div className="recommended-deals-row flex justify-between gap-3 overflow-x-auto overflow-y-hidden pb-6 sm:justify-start sm:gap-4">
         {plans.map((plan) => (
           <div
             key={plan.name}
-            className="relative flex min-w-40 shrink-0 flex-col rounded-2xl border border-white/10 bg-linear-to-b from-violet-500/8 to-transparent px-4 py-4 pb-8 sm:pb-12 shadow-[0_4px_24px_rgba(0,0,0,0.25)] transition-all duration-200 hover:border-violet-400/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:scale-[1.02] active:scale-[0.99] sm:min-w-36 sm:px-4 sm:py-4"
+            className={`relative flex min-w-40 shrink-0 flex-col rounded-2xl border px-4 py-4 pb-8 shadow-[0_4px_24px_rgba(0,0,0,0.25)] transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] sm:pb-12 sm:min-w-36 sm:px-4 sm:py-4 ${style.card}`}
           >
             <div className="flex flex-wrap items-baseline gap-1.5">
               <span className="text-2xl font-extrabold tabular-nums tracking-tight text-white sm:text-3xl">
@@ -58,33 +69,19 @@ export function FiveGPlansSection({ plans, devicePricing }: FiveGPlansSectionPro
                   KSh/month
                 </span>
               </p>
-              <div className="mt-3 space-y-1.5 text-[10px] sm:text-xs">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-white/55">Full speed</span>
-                  <span className="font-semibold text-white/95">
-                    {plan.primaryBundle}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-white/55">Then at {plan.fupSpeedMbps} Mbps</span>
-                  <span className="font-semibold text-white/90">
-                    {plan.fupBundle}
-                  </span>
-                </div>
-              </div>
             </div>
             <ApplyNowButton
               planName="5G data plans"
               speedLabel={`${plan.speedMbps} Mbps`}
               priceLabel={`${plan.priceKes.toLocaleString("en-KE")} KSh/month`}
               devicePriceLabel={
-                devicePricing
-                  ? devicePricing.discountedKes === 0
+                devicePricing == null
+                  ? "Free"
+                  : devicePricing.discountedKes === 0
                     ? "Free"
                     : `${devicePricing.discountedKes.toLocaleString("en-KE")} KSh`
-                  : undefined
               }
-              buttonClassName="border-violet-400/30 bg-violet-500/25 text-violet-100 hover:bg-violet-500/35 hover:border-violet-400/50 active:bg-violet-500/30"
+              buttonClassName={style.button}
             />
           </div>
         ))}

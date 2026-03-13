@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
+import { getCountiesForProvider } from "@/app/data/locationCoverage";
 import { providers } from "@/app/data/providers";
+import { AirtelApplyForm } from "./_components/AirtelApplyForm";
 import { ApplyForm } from "./_components/ApplyForm";
 
 const PROVIDER_SLUGS = providers.map((p) => p.slug);
@@ -35,6 +37,16 @@ export default async function ApplyPage({
   const county = getSingleQueryValue(query.county);
   const deviceRaw = getSingleQueryValue(query.device);
   const device = deviceRaw ? decodeURIComponent(deviceRaw) : "";
+
+  const installationTowns =
+    slug === "airtel" ? getCountiesForProvider("airtel") : [];
+  const defaultPackage =
+    slug === "airtel" && speed
+      ? /30\s*Mbps/i.test(speed)
+        ? ("premium" as const)
+        : ("standard" as const)
+      : undefined;
+  const defaultTown = county ? decodeURIComponent(county) : "";
 
   return (
     <div className="min-h-screen bg-background">
@@ -136,7 +148,15 @@ export default async function ApplyPage({
             </>
           )}
           <div className="mt-3 w-full px-3 sm:px-0">
-            <ApplyForm />
+            {slug === "airtel" ? (
+              <AirtelApplyForm
+                installationTowns={installationTowns}
+                defaultPackage={defaultPackage}
+                defaultTown={defaultTown}
+              />
+            ) : (
+              <ApplyForm />
+            )}
           </div>
         </div>
       </main>

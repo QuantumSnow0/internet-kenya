@@ -27,6 +27,7 @@ export const metadata: Metadata = {
     "Find the best internet in your area. Compare ISP plans by speed, price, and coverage—then sign up or request a connection. Location-first.",
 };
 
+// Status bar / address bar color on mobile (matches app background)
 export const viewport = {
   themeColor: "#191c29",
 };
@@ -39,9 +40,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="theme-color" content="#191c29" />
         <meta name="msapplication-navbutton-color" content="#191c29" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
       </head>
       <body
         className={`${dmSans.variable} ${geistMono.variable} antialiased h-screen max-h-dvh flex flex-col overflow-hidden text-neutral-100 font-sans`}

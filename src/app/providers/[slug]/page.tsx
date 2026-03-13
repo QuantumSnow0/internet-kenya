@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getCountiesForProvider } from "@/app/data/locationCoverage";
 import { providerLogoAccent } from "@/app/data/providerAccents";
 import { providers } from "@/app/data/providers";
+import { getAirtel5GPlans } from "@/app/data/airtelPlans";
 import {
   getRecommendedTieredPlans,
   getSafaricom5GDevicePricing,
@@ -51,7 +52,11 @@ export default async function ProviderPage({
   const recommendedPlans =
     provider.slug === "safaricom" ? getRecommendedTieredPlans() : [];
   const fiveGPlans =
-    provider.slug === "safaricom" ? getSafaricom5GPlans() : [];
+    provider.slug === "safaricom"
+      ? getSafaricom5GPlans()
+      : provider.slug === "airtel"
+        ? getAirtel5GPlans()
+        : [];
   const fiveGDevicePricing =
     provider.slug === "safaricom" ? getSafaricom5GDevicePricing() : null;
   const tieredUnlimitedPlans =
@@ -113,6 +118,7 @@ export default async function ProviderPage({
           <FiveGPlansSection
             plans={fiveGPlans}
             devicePricing={fiveGDevicePricing}
+            accent={provider.slug === "airtel" ? "red" : "violet"}
           />
         )}
         {tieredUnlimitedPlans.length > 0 && (
