@@ -25,9 +25,7 @@ export default function AboutPage() {
       <section className={sectionClass}>
         <h2 className={headingClass}>What we do</h2>
         <p className={paraClass}>
-          Internet Kenya is a one-stop platform to find and sign up for the best internet in your area.
-          We compare plans from major Kenyan providers including Safaricom, Airtel, and Faiba by speed,
-          price, and coverage so you can choose with confidence and get connected faster.
+        At Internet Kenya, we put customers at the heart of their internet experience. We bring all internet providers together in one trusted marketplace, so you can see real speeds, transparent pricing, and honest customer reviews all in one place. Just like your trusted ride-share app, we match you with the best internet service for your location and needs—giving you confidence and simplicity in your choice. Your best internet is just a click away.
         </p>
       </section>
 
