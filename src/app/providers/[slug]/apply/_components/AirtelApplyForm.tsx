@@ -6,9 +6,24 @@ const buttonClass =
   "mt-2 w-full rounded-lg border-2 border-red-400/50 bg-red-500/25 px-4 py-3 text-sm font-semibold text-red-100 transition-colors hover:bg-red-500/35 hover:border-red-400/60 active:bg-red-500/30 disabled:opacity-50 disabled:pointer-events-none";
 const inputClass =
   "w-full border-0 border-b-2 border-white/25 bg-transparent px-0 pb-2 pt-1 text-sm text-white placeholder:text-white/40 focus:border-red-400/80 focus:outline-none focus:ring-0 sm:text-base";
-const labelClass = "text-xs font-medium text-white/60 sm:text-sm";
+const labelClass = "text-xs font-medium text-white/85 sm:text-sm";
 const selectClass =
   "w-full border-0 border-b-2 border-white/25 bg-transparent px-0 pb-2 pt-1 text-sm text-white focus:border-red-400/80 focus:outline-none focus:ring-0 sm:text-base [&>option]:bg-[rgb(25,28,41)]";
+
+/** Visit time options (12-hour display, 24-hour value for API). */
+const VISIT_TIME_OPTIONS: { label: string; value: string }[] = [
+  { label: "8:00 AM", value: "08:00" },
+  { label: "9:00 AM", value: "09:00" },
+  { label: "10:00 AM", value: "10:00" },
+  { label: "11:00 AM", value: "11:00" },
+  { label: "12:00 PM", value: "12:00" },
+  { label: "1:00 PM", value: "13:00" },
+  { label: "2:00 PM", value: "14:00" },
+  { label: "3:00 PM", value: "15:00" },
+  { label: "4:00 PM", value: "16:00" },
+  { label: "5:00 PM", value: "17:00" },
+  { label: "6:00 PM", value: "18:00" },
+];
 
 type AirtelApplyFormProps = {
   /** Towns for installation (e.g. Airtel-supported counties). */
@@ -216,14 +231,20 @@ export function AirtelApplyForm({
         <label htmlFor="airtel-visit-time" className={labelClass}>
           Visit time
         </label>
-        <input
+        <select
           id="airtel-visit-time"
-          type="time"
           value={visitTime}
           onChange={(e) => setVisitTime(e.target.value)}
-          className={inputClass}
-          autoComplete="off"
-        />
+          className={selectClass}
+          required
+        >
+          <option value="">Select time</option>
+          {VISIT_TIME_OPTIONS.map(({ label, value }) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
       </div>
 
       {submitMessage && (

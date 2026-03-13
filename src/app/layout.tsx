@@ -45,10 +45,10 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </head>
       <body
-        className={`${dmSans.variable} ${geistMono.variable} antialiased h-screen max-h-dvh flex flex-col overflow-hidden text-neutral-100 font-sans`}
+        className={`${dmSans.variable} ${geistMono.variable} antialiased min-h-dvh flex flex-col text-neutral-100 font-sans`}
       >
-        <main className="flex-1 min-h-0 overflow-auto px-4 pt-0 sm:px-6 sm:pt-0">
-          <div className="mx-auto max-w-6xl min-h-full">{children}</div>
+        <main className="min-h-0 flex-1 overflow-auto px-4 pt-0 sm:px-6 sm:pt-0">
+          <div className="mx-auto max-w-6xl">{children}</div>
         </main>
 
         <Footer />
