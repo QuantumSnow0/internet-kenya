@@ -8,7 +8,7 @@ const TABS = ["Popular", "Cheapest", "Fastest"] as const;
 const POPULAR_PLANS = [
   { planName: "Bronze", speed: "15 Mbps", priceKsh: 2250, installationKsh: 0, validity: "30 days validity" },
   { planName: "Premium", speed: "50 Mbps", priceKsh: 4000, installationKsh: 2999, validity: "30 days validity" },
-  { planName: "Unlimited", speed: "50 Mbps", priceKsh: 4999, installationKsh: 2000, validity: "30 days validity" },
+  { planName: "Economy", speed: "5 Mbps", priceKsh: 1500, installationKsh: 0, validity: "30 days validity" },
 ];
 
 export function DiscoverSection() {
@@ -17,7 +17,7 @@ export function DiscoverSection() {
 
   return (
     <>
-      <div className="mt-6 flex gap-10" role="tablist" aria-label="Sort plans by">
+      <div className="mt-3 flex gap-10" role="tablist" aria-label="Sort plans by">
         {TABS.map((tab) => (
           <button
             key={tab}
@@ -40,9 +40,9 @@ export function DiscoverSection() {
       </div>
 
       {active === "Popular" && (
-        <section className="mt-1 pt-6" aria-label="Popular plans">
+        <section className="mt-1 pt-3" aria-label="Popular plans">
           <div className="recommended-deals-row -mx-3 overflow-x-auto overflow-y-visible pt-3 pb-4 sm:-mx-6 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:mx-0 md:pt-4 md:pb-6">
-            <div className="flex gap-4 pl-3 pr-3 sm:pl-6 sm:pr-6 md:contents">
+            <div className="flex gap-4 pl-3 pr-0 sm:pl-6 sm:pr-0 md:contents">
             {POPULAR_PLANS.map((plan, index) => (
               <PlanCard
                 key={plan.planName}
@@ -52,8 +52,9 @@ export function DiscoverSection() {
                 installationKsh={plan.installationKsh}
                 validity={plan.validity}
                 installationLabel={index === 0 ? "Free router included" : index === 1 ? "5G device: Ksh. 2,999" : undefined}
-                productLabel={index === 0 ? "Safaricom Fiber" : index === 1 ? "Safaricom 5G" : undefined}
-                iconImageSrc={index === 0 ? "/safaricom-router.png" : index === 1 ? "/safaricom-5g-router.png" : undefined}
+                productLabel={index === 0 ? "Safaricom Fiber" : index === 1 ? "Safaricom 5G" : index === 2 ? "Safaricom Fiber" : undefined}
+                iconImageSrc={index === 0 ? "/safaricom-router.png" : index === 1 ? "/safaricom-5g-router.png" : index === 2 ? "/safaricom-router.png" : undefined}
+                headerClass={index === 0 ? "bg-amber-700" : index === 1 ? "bg-green-600" : "bg-slate-500"}
                 selected={selectedPlanIndex === index}
                 recommended={index === 1}
                 onSelect={() => setSelectedPlanIndex(index)}

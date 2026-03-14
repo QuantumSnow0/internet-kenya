@@ -6,8 +6,15 @@ import { providers } from "@/app/data/providers";
 import { getAirtel5GPlans } from "@/app/data/airtelPlans";
 import { ProviderLocationSelect } from "./_components/ProviderLocationSelect";
 import { FiveGPlansSection } from "./_components/FiveGPlansSection";
+import { Carousel } from "@/app/components/Carousel";
 import { DiscoverSection } from "./_components/DiscoverSection";
 import { SafaricomFiberSection } from "./_components/SafaricomFiberSection";
+import { Safaricom5GSection } from "./_components/Safaricom5GSection";
+
+const SAFARICOM_CAROUSEL_IMAGES = [
+  { src: "/home-carousel/safaricom-5g-router.png", alt: "Safaricom 5G router" },
+  { src: "/home-carousel/Safaricom-router.jpg", alt: "Safaricom router" },
+] as const;
 
 const PROVIDER_SLUGS = providers.map((provider) => provider.slug);
 const PROVIDER_SET = new Set<string>(PROVIDER_SLUGS);
@@ -83,15 +90,27 @@ export default async function ProviderPage({
         </header>
       )}
 
-      <div className="min-w-0 bg-[rgb(25,28,41)] px-3 pt-3 sm:px-6 sm:pt-4">
+      {provider.slug === "safaricom" && (
+        <section className="relative left-1/2 w-screen -translate-x-1/2 -mt-4 sm:-mt-6 md:left-0 md:right-0 md:w-full md:max-w-6xl md:mx-auto md:translate-x-0 md:rounded-xl" aria-label="Safaricom carousel">
+          <Carousel
+            images={SAFARICOM_CAROUSEL_IMAGES}
+            ariaLabel="Safaricom"
+            intervalMs={4000}
+            className="w-full overflow-hidden"
+            innerClassName="h-[40vh] min-h-[200px]"
+          />
+        </section>
+      )}
+
+      <div className="min-w-0 bg-[rgb(25,28,41)] pl-3 pr-0 pt-3 sm:pl-6 sm:pr-0 sm:pt-4">
         {provider.slug === "safaricom" ? (
-          /* Safaricom: empty canvas for new design */
-          <main className="mt-8 min-h-[40vh]" aria-label="Safaricom plans">
+          <main className="mt-2 min-h-[40vh]" aria-label="Safaricom plans">
             <h1 className="font-discover text-4xl font-bold text-white sm:text-5xl md:text-6xl">
               Discover
             </h1>
             <DiscoverSection />
             <SafaricomFiberSection />
+            <Safaricom5GSection />
           </main>
         ) : (
           <>

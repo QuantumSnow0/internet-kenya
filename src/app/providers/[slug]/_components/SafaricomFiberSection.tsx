@@ -168,7 +168,7 @@ export function SafaricomFiberSection() {
       </h2>
       
       <div className="recommended-deals-row -mx-3 mt-4 overflow-x-auto overflow-y-visible pb-6 pt-2 sm:-mx-6 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:mx-0">
-        <div className="flex gap-4 pl-3 pr-3 sm:pl-6 sm:pr-6 md:contents">
+        <div className="flex gap-4 pl-3 pr-0 sm:pl-6 sm:pr-0 md:contents">
           {FIBER_PLANS.map((plan) => (
             <FiberPlanCard key={plan.tier} plan={plan} />
           ))}

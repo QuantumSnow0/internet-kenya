@@ -8,6 +8,8 @@ export type CarouselProps = {
   images: readonly CarouselImage[];
   intervalMs?: number;
   className?: string;
+  /** Override inner container height (e.g. "h-[40vh] min-h-[200px]") for a smaller carousel. */
+  innerClassName?: string;
   slideClassName?: string;
   ariaLabel?: string;
 };
@@ -19,10 +21,13 @@ const FADE_EASING = "cubic-bezier(0.4, 0, 0.2, 1)";
 /**
  * Full-bleed carousel: infinite loop via fade. No position reset — just cycle opacity.
  */
+const DEFAULT_INNER_CLASS = "h-[72vh] min-h-[320px]";
+
 export function Carousel({
   images,
   intervalMs = DEFAULT_INTERVAL_MS,
   className = "",
+  innerClassName,
   slideClassName,
   ariaLabel = "Carousel",
 }: CarouselProps) {
@@ -39,14 +44,14 @@ export function Carousel({
     return () => clearInterval(id);
   }, [intervalMs, images.length, goNext]);
 
-  const defaultSlideClass =
-    "relative h-[72vh] min-h-[320px] w-full overflow-hidden";
+  const innerClass = innerClassName ?? DEFAULT_INNER_CLASS;
+  const defaultSlideClass = `relative w-full overflow-hidden ${innerClass}`;
 
   if (images.length === 0) return null;
 
   return (
     <div role="region" aria-label={ariaLabel} className={className}>
-      <div className="relative w-screen h-[72vh] min-h-[320px] overflow-hidden">
+      <div className={`relative w-full overflow-hidden ${innerClass}`}>
         {images.map((img, i) => (
           <div
             key={i}
@@ -68,7 +73,7 @@ export function Carousel({
               height={440}
             />
             <div
-              className="absolute inset-x-0 bottom-0 h-2/5 min-h-[140px] pointer-events-none"
+              className="absolute inset-x-0 bottom-0 h-1/3 min-h-[100px] pointer-events-none"
               style={{
                 background:
                   "linear-gradient(to top, rgb(25, 28, 41) 0%, rgba(25, 28, 41, 0.9) 40%, rgba(25, 28, 41, 0.4) 70%, transparent 100%)",
