@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { Footer } from "./components/Footer";
 import "./globals.css";
 
@@ -14,6 +15,13 @@ const dmSans = DM_Sans({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
 });
 
 // Root metadata. Used for <title>, <meta name="description">, and (when we add
@@ -45,7 +53,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </head>
       <body
-        className={`${dmSans.variable} ${geistMono.variable} antialiased min-h-dvh flex flex-col text-neutral-100 font-sans`}
+        className={`${dmSans.variable} ${geistMono.variable} ${plusJakartaSans.variable} antialiased min-h-dvh flex flex-col text-neutral-100 font-sans`}
       >
         <main className="min-h-0 flex-1 overflow-auto px-4 pt-0 sm:px-6 sm:pt-0">
           <div className="mx-auto max-w-6xl">{children}</div>

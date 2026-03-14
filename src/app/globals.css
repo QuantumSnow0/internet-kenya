@@ -13,6 +13,7 @@
   --font-sans: var(--font-dm-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-dm-sans);
+  --font-discover: var(--font-plus-jakarta);
 }
 
 html {
@@ -202,3 +203,4 @@ main {
 .recommended-deals-row::-webkit-scrollbar {
   display: none;
 }
+
