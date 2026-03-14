@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 const buttonClass =
-  "mt-2 w-full rounded-lg border-2 border-red-400/50 bg-red-500/25 px-4 py-3 text-sm font-semibold text-red-100 transition-colors hover:bg-red-500/35 hover:border-red-400/60 active:bg-red-500/30 disabled:opacity-50 disabled:pointer-events-none";
+  "mt-2 w-full rounded-lg border-2 border-red-400/50 bg-red-500/25 px-4 py-3 text-sm font-semibold text-red-100 transition-colors hover:bg-red-500/35 hover:border-red-400/60 active:bg-red-500/30 disabled:opacity-50 disabled:pointer-events-none mb-10";
 const inputClass =
   "w-full border-0 border-b-2 border-white/25 bg-transparent px-0 pb-2 pt-1 text-sm text-white placeholder:text-white/40 focus:border-red-400/80 focus:outline-none focus:ring-0 sm:text-base";
 const labelClass = "text-xs font-medium text-white/85 sm:text-sm";
