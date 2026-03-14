@@ -41,8 +41,8 @@ export function DiscoverSection() {
 
       {active === "Popular" && (
         <section className="mt-1 pt-6" aria-label="Popular plans">
-          <div className="relative left-1/2 w-screen -translate-x-1/2">
-            <div className="recommended-deals-row flex gap-4 overflow-x-auto overflow-y-visible pt-3 pb-4 pl-3 pr-3 sm:pl-6 sm:pr-6">
+          <div className="recommended-deals-row -mx-3 overflow-x-auto overflow-y-visible pt-3 pb-4 sm:-mx-6 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:mx-0 md:pt-4 md:pb-6">
+            <div className="flex gap-4 pl-3 pr-3 sm:pl-6 sm:pr-6 md:contents">
             {POPULAR_PLANS.map((plan, index) => (
               <PlanCard
                 key={plan.planName}
@@ -57,6 +57,7 @@ export function DiscoverSection() {
                 selected={selectedPlanIndex === index}
                 recommended={index === 1}
                 onSelect={() => setSelectedPlanIndex(index)}
+                className="md:w-full md:min-w-0"
               />
             ))}
             </div>

@@ -15,6 +15,7 @@ type PlanCardProps = {
   selected?: boolean;
   recommended?: boolean;
   onSelect?: () => void;
+  className?: string;
 };
 
 const CARD_BG = "rgb(30, 33, 45)"; /* Slightly lighter than page for border-cut */
@@ -31,6 +32,7 @@ export function PlanCard({
   selected = false,
   recommended = false,
   onSelect,
+  className = "",
 }: PlanCardProps) {
   return (
     <div
@@ -43,7 +45,7 @@ export function PlanCard({
           onSelect?.();
         }
       }}
-      className={`group relative flex flex-none w-[220px] flex-col overflow-visible rounded-lg border-2 border-green-400/60 backdrop-blur-sm transition-all duration-300 sm:w-[240px]`}
+      className={`group relative flex flex-none w-[220px] flex-col overflow-visible rounded-lg border-2 border-green-400/60 backdrop-blur-sm transition-all duration-300 sm:w-[240px] ${className}`.trim()}
       style={{ background: "rgba(30,33,45,0.9)" }}
     >
       {/* Price - top strip inside card so it’s not cut off */}

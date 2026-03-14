@@ -89,7 +89,7 @@ function FiberPlanCard({
   plan: (typeof FIBER_PLANS)[number];
 }) {
   return (
-    <div className="flex w-[260px] shrink-0 flex-col overflow-hidden rounded-xl border border-white/10 bg-[rgb(30,33,45)] shadow-lg sm:w-[280px]">
+    <div className="flex w-[260px] shrink-0 flex-col overflow-hidden rounded-xl border border-white/10 bg-[rgb(30,33,45)] shadow-lg sm:w-[280px] md:w-full md:min-w-0">
       <div
         className={`flex items-center justify-center px-3 py-2 text-sm font-bold uppercase tracking-wide text-white ${plan.headerClass}`}
       >
@@ -167,8 +167,8 @@ export function SafaricomFiberSection() {
         Safaricom Fiber ( Home & Business)
       </h2>
       
-      <div className="relative left-1/2 mt-4 w-screen -translate-x-1/2">
-        <div className="recommended-deals-row flex gap-4 overflow-x-auto overflow-y-visible pb-6 pt-2 pl-3 pr-3 sm:pl-6 sm:pr-6">
+      <div className="recommended-deals-row -mx-3 mt-4 overflow-x-auto overflow-y-visible pb-6 pt-2 sm:-mx-6 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:mx-0">
+        <div className="flex gap-4 pl-3 pr-3 sm:pl-6 sm:pr-6 md:contents">
           {FIBER_PLANS.map((plan) => (
             <FiberPlanCard key={plan.tier} plan={plan} />
           ))}
